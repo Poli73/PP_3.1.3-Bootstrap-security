@@ -3,16 +3,14 @@ package com.boot.bootSecurity.controllers;
 import com.boot.bootSecurity.model.User;
 
 import com.boot.bootSecurity.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.stream.Collectors;
 
 
 @Controller

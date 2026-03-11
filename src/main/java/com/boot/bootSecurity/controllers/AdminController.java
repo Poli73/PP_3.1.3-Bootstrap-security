@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
-import java.util.List;
 
 
 @Controller
@@ -48,37 +44,43 @@ public class AdminController {
     }
 
 
-    @GetMapping("/users/create")
-    public String showCreateUserForm(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roleService.getAllRoles());
-        model.addAttribute("activePage", "admin");
-        return "admin-create-user";
-    }
+
+@GetMapping("/users/create")
+public String createUserForm(Model model) {
+    model.addAttribute("user", new User());
+    model.addAttribute("roles", roleService.getAllRoles());
+    model.addAttribute("activePage", "admin");
+
+    return "admin-create-user";
+}
+
 
     @PostMapping("/users/create")
-    public String createUser(@ModelAttribute User user,
-                             @RequestParam List<Long> roleIds) {
-        userService.createUser(user, roleIds);
+    public String createUser(@ModelAttribute User user) {
+        userService.createUser(user);
         return "redirect:/admin/users/list";
     }
 
 
-    @GetMapping("/users/edit/{id}")
-    public String showEditUserForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.getUser(id));
-        model.addAttribute("roles", roleService.getAllRoles());
-        model.addAttribute("activePage", "admin");
-        return "admin-edit-user";
-    }
+@GetMapping("/users/edit/{id}")
+public String editUserForm(@PathVariable Long id, Model model) {
 
-    @PostMapping("/users/edit/{id}")
-    public String editUser(@PathVariable Long id,
-                           @ModelAttribute User user,
-                           @RequestParam List<Long> roleIds) {
-        userService.updateUser(id, user, roleIds);
-        return "redirect:/admin/users/list";
-    }
+    model.addAttribute("user", userService.getUser(id));
+    model.addAttribute("roles", roleService.getAllRoles());
+    model.addAttribute("activePage", "admin");
+
+
+
+    return "admin-edit-user";
+}
+
+
+@PostMapping("/users/edit/{id}")
+public String editUser(@PathVariable Long id,
+                       @ModelAttribute User user) {
+    userService.updateUser(id, user);
+    return "redirect:/admin/users/list";
+}
 
 
     @GetMapping("/users/delete/{id}")
@@ -86,7 +88,7 @@ public class AdminController {
         model.addAttribute("user", userService.getUser(id));
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("activePage", "admin");
-        return "admin-delete-user"; // открывает страницу подтверждения
+        return "admin-delete-user";
     }
 
 

@@ -2,12 +2,13 @@ package com.boot.bootSecurity.init;
 
 import com.boot.bootSecurity.model.Role;
 import com.boot.bootSecurity.model.User;
-import com.boot.bootSecurity.repositories.RoleRepository;
-import com.boot.bootSecurity.repositories.UserRepository;
+
+import com.boot.bootSecurity.service.RoleService;
+import com.boot.bootSecurity.service.UserService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -15,52 +16,48 @@ import java.util.Set;
 @Component
 public class TestLoader {
 
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public TestLoader(UserRepository userRepository,
-                      RoleRepository roleRepository,
-                      PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
+    public TestLoader(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
     }
+
 
     @PostConstruct
     @Transactional
     public void loadData() {
-
-        if (userRepository.count() > 0) {
+        if (!userService.getAllUsers().isEmpty()) {
             return;
         }
 
         Role adminRole = new Role("ROLE_ADMIN");
         Role userRole = new Role("ROLE_USER");
 
-        roleRepository.save(adminRole);
-        roleRepository.save(userRole);
+        roleService.createRole(adminRole);
+        roleService.createRole(userRole);
 
         User admin = new User();
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setAge(35);
         admin.setEmail("admin@mail.ru");
-        admin.setPassword(passwordEncoder.encode("admin"));
-        admin.setRoles(Set.of(adminRole));
+        admin.setPassword("admin");
+        admin.setRoles(Set.of(adminRole, userRole));
 
-        userRepository.save(admin);
+        userService.createUser(admin);
 
         User user = new User();
         user.setFirstName("user");
         user.setLastName("user");
         user.setAge(30);
         user.setEmail("user@mail.ru");
-        user.setPassword(passwordEncoder.encode("user"));
+        user.setPassword("user");
 
         user.setRoles(Set.of(userRole));
 
-        userRepository.save(user);
+        userService.createUser(user);
     }
 }

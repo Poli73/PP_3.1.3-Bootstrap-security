@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 
 
@@ -16,7 +15,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -24,7 +22,6 @@ public class UserService {
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -33,20 +30,19 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userRepository.findById(id)
+        return userRepository.findByIdWithRoles(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + id));
     }
 
-    public void createUser(User user, List<Long> roleIds) {
+    public void createUser(User user) {
 
-        user.setRoles(new HashSet<>(roleRepository.findAllById(roleIds)));
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepository.save(user);
     }
 
-    public void updateUser(Long id, User updatedUser, List<Long> roleIds) {
+    public void updateUser(Long id, User updatedUser) {
         User existingUser = getUser(id);
         existingUser.setFirstName(updatedUser.getFirstName());
         existingUser.setLastName(updatedUser.getLastName());
@@ -55,7 +51,7 @@ public class UserService {
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
-        existingUser.setRoles(new HashSet<>(roleRepository.findAllById(roleIds)));
+        existingUser.setRoles(updatedUser.getRoles());
         userRepository.save(existingUser);
     }
 
