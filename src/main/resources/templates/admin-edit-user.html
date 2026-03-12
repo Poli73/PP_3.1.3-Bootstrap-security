@@ -89,9 +89,9 @@
 
                         <div class="mb-3">
                             <label class="form-label">First Name</label>
-                            <label>
-                                <input class="form-control" th:field="*{firstName}">
-                            </label>
+
+                            <input class="form-control" th:field="*{firstName}">
+
                         </div>
 
 
@@ -126,22 +126,19 @@
                             </label>
                         </div>
 
+
                         <div class="mb-3">
                             <label class="form-label">Roles</label>
 
-                            <label>
-                                <select th:field="*{roles}" multiple class="form-select">
+                            <select th:field="*{roles}" multiple class="form-select">
 
-                                    <option th:each="role : ${roles}"
-                                            th:value="${role.id}"
-                                            th:text="${role.name}">
-                                    </option>
+                                <option th:each="role : ${roles}"
+                                        th:value="${role.id}"
+                                        th:text="${role.name}">
+                                </option>
 
-                                </select>
-                            </label>
-
+                            </select>
                         </div>
-
 
                         <div class="text-center">
                             <button class="btn btn-primary">

@@ -3,8 +3,8 @@ package com.boot.bootSecurity.init;
 import com.boot.bootSecurity.model.Role;
 import com.boot.bootSecurity.model.User;
 
-import com.boot.bootSecurity.service.RoleService;
-import com.boot.bootSecurity.service.UserService;
+import com.boot.bootSecurity.service.RoleServiceImpl;
+import com.boot.bootSecurity.service.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,11 @@ import java.util.Set;
 @Component
 public class TestLoader {
 
-    private final UserService userService;
-    private final RoleService roleService;
+    private final UserServiceImpl userService;
+    private final RoleServiceImpl roleService;
 
     @Autowired
-    public TestLoader(UserService userService, RoleService roleService) {
+    public TestLoader(UserServiceImpl userService, RoleServiceImpl roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }

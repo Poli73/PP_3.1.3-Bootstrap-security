@@ -1,46 +1,18 @@
 package com.boot.bootSecurity.service;
 
-
 import com.boot.bootSecurity.model.Role;
-import com.boot.bootSecurity.repositories.RoleRepository;
-
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class RoleService {
+public interface RoleService {
+    List<Role> getAllRoles();
 
-    private final RoleRepository roleRepository;
+    void deleteRole(Long id);
 
+    void createRole(Role role);
 
-    public RoleService(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
+    Role getRole(Long id);
 
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
-    }
-
-    public void deleteRole(Long id) {
-        roleRepository.deleteById(id);
-    }
-
-    public void createRole(Role role) {
-        roleRepository.save(role);
-    }
-
-
-    public Role getRole(Long id) {
-        return roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found with id " + id));
-    }
-
-    public void updateRole(Long id, Role role) {
-        Role existingRole = getRole(id);
-        existingRole.setName(role.getName());
-        roleRepository.save(existingRole);
-    }
-
+    void updateRole(Long id, Role role);
 
 }

@@ -2,7 +2,7 @@ package com.boot.bootSecurity.controllers;
 
 import com.boot.bootSecurity.model.User;
 
-import com.boot.bootSecurity.service.UserService;
+import com.boot.bootSecurity.service.UserServiceImpl;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserController(UserService userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

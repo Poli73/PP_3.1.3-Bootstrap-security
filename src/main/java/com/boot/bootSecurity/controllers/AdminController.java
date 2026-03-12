@@ -3,8 +3,8 @@ package com.boot.bootSecurity.controllers;
 
 import com.boot.bootSecurity.model.User;
 
-import com.boot.bootSecurity.service.RoleService;
-import com.boot.bootSecurity.service.UserService;
+import com.boot.bootSecurity.service.RoleServiceImpl;
+import com.boot.bootSecurity.service.UserServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
-    private final RoleService roleService;
+    private final UserServiceImpl userService;
+    private final RoleServiceImpl roleService;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserServiceImpl userService, RoleServiceImpl roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -39,7 +39,7 @@ public class AdminController {
     @GetMapping("/users/list")
     public String listUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("activePage", "admin"); // подсветка sidebar
+        model.addAttribute("activePage", "admin");
         return "admin-list-users";
     }
 

@@ -103,36 +103,27 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3 row">
-                                <label class="col-sm-4 col-form-label text-end">Password</label>
-                                <div class="col-sm-8">
-                                    <label>
-                                        <input type="password" class="form-control" th:field="*{password}" required>
-                                    </label>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" th:field="*{password}">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Roles</label>
-
-                                <label>
-                                    <select th:field="*{roles}" multiple class="form-select">
-
-                                        <option th:each="role : ${roles}"
-                                                th:value="${role.id}"
-                                                th:text="${role.name}">
-                                        </option>
-
-                                    </select>
-                                </label>
-
+                                <select th:field="*{roles}" multiple class="form-select">
+                                    <option th:each="role : ${roles}"
+                                            th:value="${role.id}"
+                                            th:text="${role.name}">
+                                    </option>
+                                </select>
                             </div>
 
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-success w-50">Create</button>
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="submit" class="btn btn-primary">Create</button>
                             </div>
 
                         </form>
+
                     </div>
                 </div>
             </div>

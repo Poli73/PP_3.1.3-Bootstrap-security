@@ -39,7 +39,7 @@ public class User implements UserDetails {
     private String firstName;
 
     @NotEmpty(message = "Last name must not be empty")
-    @Size(min = 2, max = 25, message = "First name must contain between 2 and 25 characters")
+    @Size(min = 2, max = 25, message = "Last name must contain between 2 and 25 characters")
     @Column(name = "lastName")
     private String lastName;
     @NotNull(message = "Age must not be empty")
