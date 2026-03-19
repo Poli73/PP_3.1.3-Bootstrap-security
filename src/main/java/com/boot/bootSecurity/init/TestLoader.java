@@ -32,9 +32,6 @@ public class TestLoader {
     @Transactional
     public void loadData() {
 
-        if (userRepository.count() > 0) {
-            return;
-        }
 
         Role adminRole = new Role("ROLE_ADMIN");
         Role userRole = new Role("ROLE_USER");

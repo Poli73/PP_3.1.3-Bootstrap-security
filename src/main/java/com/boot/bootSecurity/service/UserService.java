@@ -1,15 +1,21 @@
 package com.boot.bootSecurity.service;
 
 
+import com.boot.bootSecurity.dto.UserResponseDto;
+import com.boot.bootSecurity.model.Role;
 import com.boot.bootSecurity.model.User;
+import com.boot.bootSecurity.model.UserDto;
 import com.boot.bootSecurity.repositories.RoleRepository;
 import com.boot.bootSecurity.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
+
 import java.util.List;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -37,24 +43,67 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
     }
 
-    public void createUser(User user, List<Long> roleIds) {
-        user.setRoles(new HashSet<>(roleRepository.findAllById(roleIds)));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+
+    public User createUser(UserDto userDto) {
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setYearOfBirth(userDto.getYearOfBirth());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        // Ищем роли по имени
+        Set<Role> roles = userDto.getRoles().stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
+                .collect(Collectors.toSet());
+
+        user.setRoles(roles);
+
+        return userRepository.save(user);
     }
 
-    public void updateUser(Long id, User updatedUser, List<Long> roleIds) {
-        User existingUser = getUser(id);
-        existingUser.setUsername(updatedUser.getUsername());
-        existingUser.setYearOfBirth(updatedUser.getYearOfBirth());
-        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+
+    public User updateUser(Long id, UserDto userDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setUsername(userDto.getUsername());
+        user.setYearOfBirth(userDto.getYearOfBirth());
+
+        // Если есть пароль — хешируем
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
-        existingUser.setRoles(new HashSet<>(roleRepository.findAllById(roleIds)));
-        userRepository.save(existingUser);
+
+        // Ищем роли по имени
+        Set<Role> roles = userDto.getRoles().stream()
+                .map(roleName -> roleRepository.findByName(roleName)
+                        .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
+                .collect(Collectors.toSet());
+
+        user.setRoles(roles);
+
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long id) {
+
         userRepository.deleteById(id);
     }
+
+
+    public List<UserResponseDto> getAllUsersDto() {
+        return userRepository.findAll().stream()
+                .map(user -> {
+                    UserResponseDto dto = new UserResponseDto();
+                    dto.setId(user.getId());
+                    dto.setUsername(user.getUsername());
+                    dto.setYearOfBirth(user.getYearOfBirth());
+                    dto.setRoles(user.getRoles().stream()
+                            .map(Role::getName)
+                            .toList());
+                    return dto;
+                })
+                .toList();
+    }
+
 }

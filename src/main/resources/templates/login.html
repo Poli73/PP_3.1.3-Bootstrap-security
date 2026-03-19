@@ -1,27 +1,38 @@
+
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
 
-<h2>Login</h2>
-<form method="post" th:action="@{/login}">
-    <label>Username:</label>
-    <label>
-        <input type="text" name="username"/>
-    </label><br/><br/>
-
-    <label>Password:</label>
-    <label>
-        <input type="password" name="password"/>
-    </label><br/><br/>
-
-    <button type="submit">Login</button>
-</form>
+<div id="loginContainer">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <label>Username:</label>
+        <input type="text" id="username" required><br><br>
+        <label>Password:</label>
+        <input type="password" id="password" required><br><br>
+        <button type="submit">Login</button>
+    </form>
+</div>
 
 
+<div id="userContainer" style="display:none;">
+    <h2>User Info</h2>
+    <p>Username: <span id="userName"></span></p>
+    <p>Roles: <span id="userRoles"></span></p>
+    <p>Year of Birth: <span id="yearOfBirth"></span></p>
+</div>
+
+
+<div id="adminContainer" style="display:none;">
+    <h2>Admin Panel</h2>
+    <button onclick="loadUsers()">Load Users</button>
+    <div id="usersTable"></div>
+</div>
+
+<script src="login.js"></script>
 </body>
 </html>

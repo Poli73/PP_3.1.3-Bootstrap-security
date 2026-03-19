@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Page</title>
+    <style>
+        table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }
+        th { background-color: #eee; }
+        input[type="text"], input[type="number"], input[type="password"] { width: 150px; }
+        .form-container { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Users Management</h1>
+
+
+<div class="form-container">
+    <h2>Create User</h2>
+    <form id="createForm">
+        <label>Username: <input type="text" id="username" required></label><br>
+        <label>Year of Birth: <input type="number" id="yearOfBirth" required></label><br>
+        <label>Password: <input type="password" id="password" required></label><br>
+        <div id="rolesContainer">Roles will load here...</div>
+        <button type="submit">Create User</button>
+    </form>
+</div>
+
+
+<div class="form-container">
+    <h2>Edit User</h2>
+    <form id="editForm">
+        <input type="hidden" id="editId">
+        <label>Username: <input type="text" id="editUsername" required></label><br>
+        <label>Year of Birth: <input type="number" id="editYearOfBirth" required></label><br>
+        <label>Password: <input type="password" id="editPassword" placeholder="Leave empty to keep"></label><br>
+        <div id="editRolesContainer">Roles will load here...</div>
+        <button type="submit">Update User</button>
+    </form>
+</div>
+
+
+<h2>All Users</h2>
+<table id="usersTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Year</th>
+        <th>Roles</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script src="/js/users.js"></script>
+</body>
+</html>

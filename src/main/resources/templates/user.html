@@ -1,17 +1,38 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>User Page</title>
 </head>
 <body>
-<div th:replace="fragments/navbar :: navbar"></div>
-<h2>Welcome, <span th:text="${user.username}"></span>!</h2>
-<p>Your roles:</p>
-<ul>
 
-    <li th:each="role : ${user.roles}" th:text="${role.name}"></li>
-</ul>
-<p>Username: <span th:text="${user.username}"></span></p>
-<p>Password: <span th:text="${user.password}"></span> (hashed)</p>
+<div id="userContainer">
+    <h2>Welcome, <span id="username"></span>!</h2>
+    <p>Your year of birth: <span id="yearOfBirth"></span></p>
+    <p>Your roles: <span id="roles"></span></p>
+</div>
+
+<p id="errorMessage" style="color:red"></p>
+
+<script>
+    async function loadUser() {
+        try {
+            const response = await fetch('/api/user/me');
+            if (!response.ok) throw new Error('Failed to fetch user data');
+            const user = await response.json();
+
+            document.getElementById('username').textContent = user.username;
+            document.getElementById('yearOfBirth').textContent = user.yearOfBirth;
+            document.getElementById('roles').textContent = user.roles.join(', ');
+        } catch (err) {
+            console.error(err);
+            document.getElementById('errorMessage').textContent = "Cannot load user data.";
+        }
+    }
+
+    loadUser();
+</script>
+
 </body>
 </html>

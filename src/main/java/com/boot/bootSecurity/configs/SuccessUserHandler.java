@@ -1,12 +1,18 @@
 package com.boot.bootSecurity.configs;
+
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+
 import java.io.IOException;
-import org.springframework.security.core.authority.AuthorityUtils;
-import java.util.Set;
+
+
+import java.util.List;
+
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
 
@@ -15,12 +21,15 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
-        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        if (roles.contains("ROLE_ADMIN")) {
-            response.sendRedirect("/admin");
-        } else {
-            response.sendRedirect("/user");
-        }
+        List<String> roles = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        String json = "{ \"status\": \"success\", \"roles\": " + roles.toString() + " }";
+
+        response.getWriter().write(json);
     }
 }
